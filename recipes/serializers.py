@@ -1,24 +1,28 @@
 from rest_framework import serializers
 
-from .models import (
+from recipes.models import (
     GarnishType,
-    GlassType,
-    Ingredient,
-    MeasurementUnit,
+    IngredientCategory,
     Recipe,
     RecipeGarnish,
+    RecipeIngredient,
+    Tag,
+    Vessel,
 )
 
 
-class MeasurementUnitSerializer(serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MeasurementUnit
-        fields = ["id", "title", "symbol"]
+        model = Tag
+        fields = [
+            "id",
+            "name",
+        ]
 
 
-class GlassTypeSerializer(serializers.ModelSerializer):
+class VesselSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GlassType
+        model = Vessel
         fields = ["id", "name"]
 
 
@@ -39,29 +43,47 @@ class RecipeGarnishSerializer(serializers.ModelSerializer):
         fields = ["id", "garnish_type", "is_primary"]
 
 
-class IngredientSerializer(serializers.ModelSerializer):
-    unit = MeasurementUnitSerializer()
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IngredientCategory
+        fields = [
+            "id",
+            "title",
+        ]
+
+
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source="ingredient.title")
+    category = RecipeIngredientSerializer(source="ingredient.category")
+    oz_amount = serializers.ReadOnlyField()
 
     class Meta:
-        model = Ingredient
-        fields = ["id", "title", "amount", "unit"]
+        model = RecipeIngredient
+        fields = ("id", "name", "category", "ml_amount", "oz_amount", "note")
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    ingredients = IngredientSerializer(many=True)
-    primary_glass = GlassTypeSerializer()
-    alt_glasses = GlassTypeSerializer(many=True)
+    ingredients = RecipeIngredientSerializer(
+        source="recipe_ingredients", many=True, read_only=True
+    )
+    primary_vessel = VesselSerializer()
+    alt_vessels = VesselSerializer(many=True)
     garnishes = RecipeGarnishSerializer(
         source="recipe_garnishes", many=True, read_only=True
     )
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recipe
         fields = [
             "id",
             "title",
+            "category",
+            "serving_temperature",
+            "method",
             "ingredients",
-            "primary_glass",
-            "alt_glasses",
+            "primary_vessel",
+            "alt_vessels",
             "garnishes",
+            "tags",
         ]

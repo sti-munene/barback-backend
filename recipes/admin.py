@@ -1,35 +1,52 @@
 from django.contrib import admin
 
-from .models import (
+from recipes.models import (
     GarnishType,
-    GlassType,
     Ingredient,
-    MeasurementUnit,
+    IngredientCategory,
     Recipe,
     RecipeGarnish,
+    RecipeIngredient,
+    Tag,
+    Vessel,
 )
+
+
+class RecipeIngredientInline(admin.TabularInline):
+    model = RecipeIngredient
+    extra = 1  # Number of empty rows to show by default
+    fields = ("ingredient", "ml_amount", "oz_amount", "note")
+    readonly_fields = ("oz_amount",)
 
 
 class RecipeGarnishInline(admin.TabularInline):
     model = RecipeGarnish
-    extra = 1  # Number of empty rows to show by default
-    fields = ("garnish",)
+    extra = 1
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("title", "method", "primary_glass")
-    list_filter = ("method", "primary_glass")
+    list_display = ("title", "method", "primary_vessel", "created_on")
     search_fields = ("title",)
-    inlines = [RecipeGarnishInline]
+    list_filter = ("method", "tags")
+    exclude = (
+        "ingredients",
+    )  # Exclude 'ingredients' because the Inline handles the through-relationship
+    inlines = [RecipeIngredientInline, RecipeGarnishInline]
+    filter_horizontal = (
+        "alt_vessels",
+        "tags",
+    )  # This helps with UI if we have many Tags/Vessels
 
 
-@admin.register(GarnishType)
-class GarnishTypeAdmin(admin.ModelAdmin):
-    list_display = ("name", "created_on")
-    search_fields = ("name",)
+@admin.register(Ingredient)
+class IngredientAdmin(admin.ModelAdmin):
+    list_display = ("title",)
+    list_filter = ("category",)
+    search_fields = ("title",)
 
 
-admin.site.register(GlassType)
-admin.site.register(MeasurementUnit)
-admin.site.register(Ingredient)
+admin.site.register(Vessel)
+admin.site.register(IngredientCategory)
+admin.site.register(GarnishType)
+admin.site.register(Tag)

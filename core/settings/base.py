@@ -10,26 +10,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-0=@y9o&3rmew0f$gll#&on1^f%oa57u%99by-9s3f2@oi@w_1i"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 # Application definition
-DEFAULT_APPS = [
+CORE_DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -38,11 +32,11 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 
-OTHER_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = ["rest_framework"]
 
-CUSTOM_APPS = ["recipes.apps.RecipesConfig"]
+CUSTOM_APPS = ["recipes.apps.RecipesConfig", "utils.apps.UtilsConfig"]
 
-INSTALLED_APPS = DEFAULT_APPS + OTHER_APPS + CUSTOM_APPS
+INSTALLED_APPS = CORE_DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -73,17 +67,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 
 # Password validation
