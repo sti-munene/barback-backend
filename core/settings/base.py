@@ -32,9 +32,13 @@ CORE_DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = ["rest_framework", "django_ckeditor_5"]
 
-CUSTOM_APPS = ["recipes.apps.RecipesConfig", "utils.apps.UtilsConfig"]
+CUSTOM_APPS = [
+    "recipes.apps.RecipesConfig",
+    "utils.apps.UtilsConfig",
+    "blog.apps.BlogConfig",
+]
 
 INSTALLED_APPS = CORE_DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
@@ -105,7 +109,94 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+# Where collectstatic DUMPS everything (Don't touch this folder manually)
+STATIC_ROOT = BASE_DIR / "static-files"
+
+# Where you WRITE your own custom CSS/JS
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Media Paths (crucial for image uploads)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# CKEditor 5 Storage
+CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
+            "imageUpload",
+        ],
+    },
+    "extends": {
+        "blockToolbar": [
+            "paragraph",
+            "heading1",
+            "heading2",
+            "heading3",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
+        ],
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "underline",
+            "strikethrough",
+            "code",
+            "subscript",
+            "superscript",
+            "highlight",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "todoList",
+            "|",
+            "blockQuote",
+            "imageUpload",
+            "insertTable",
+            "|",
+            "fontSize",
+            "fontFamily",
+            "fontColor",
+            "fontBackgroundColor",
+            "mediaEmbed",
+            "removeFormat",
+            "sourceEditing",
+        ],
+        "image": {
+            "toolbar": [
+                "imageTextAlternative",
+                "|",
+                "imageStyle:alignLeft",
+                "imageStyle:alignRight",
+                "imageStyle:alignCenter",
+                "imageStyle:side",
+            ],
+            "styles": ["full", "side", "alignLeft", "alignCenter", "alignRight"],
+        },
+        # THE FIX: This makes the editor large and professional
+        "height": 500,
+        "width": "100%",
+    },
+}

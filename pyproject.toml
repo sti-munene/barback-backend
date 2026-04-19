@@ -12,7 +12,8 @@ dependencies = [
     "python-dotenv (>=1.2.2,<2.0.0)",
     "pillow (>=12.2.0,<13.0.0)",
     "djangorestframework (>=3.17.1,<4.0.0)",
-    "django-filter (>=25.2,<26.0)"
+    "django-filter (>=25.2,<26.0)",
+    "django-ckeditor-5 (>=0.2.20,<0.3.0)",
 ]
 
 
