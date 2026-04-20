@@ -1,7 +1,8 @@
-from rest_framework import permissions, viewsets
+from rest_framework import filters, permissions, viewsets
 
 from blog.models import Post
 from blog.serializers import PostSerializer
+from utils.pagination import BasePaginationSet
 
 
 class PostViewSet(viewsets.ReadOnlyModelViewSet):
@@ -11,9 +12,8 @@ class PostViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Post.objects.filter(status="PUBLISHED")  # Only show live posts
     serializer_class = PostSerializer
-
-    # Use 'slug' in the URL instead of 'id' for SEO
     lookup_field = "slug"
-
-    # Ensure the API is public
     permission_classes = [permissions.AllowAny]
+    pagination_class = BasePaginationSet
+    search_fields = ["title"]
+    filter_backends = (filters.SearchFilter,)

@@ -1,11 +1,20 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 
-from .views import PostViewSet
+from blog.views import PostViewSet
 
-router = DefaultRouter()
-router.register(r"posts", PostViewSet, basename="post")
+post_list = PostViewSet.as_view({"get": "list"})
+post_detail = PostViewSet.as_view({"get": "retrieve"})
+
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path(
+        "posts/",
+        post_list,
+        name="post_list",
+    ),
+    path(
+        "posts/<str:slug>/",
+        post_detail,
+        name="post_detail",
+    ),
 ]

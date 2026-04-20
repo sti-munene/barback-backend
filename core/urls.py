@@ -23,7 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("recipes/", include("recipes.urls")),
-    path("api/", include("blog.urls")),
+    path("blog/", include("blog.urls")),
 ]
 
 if settings.DEBUG:

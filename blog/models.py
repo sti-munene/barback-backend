@@ -21,7 +21,7 @@ class Post(models.Model):
     )
     featured_image = models.ImageField(upload_to="blog/images/", blank=True, null=True)
     meta_title = models.CharField(max_length=70, blank=True, null=True)
-    meta_description = models.CharField(max_length=160, blank=True, null=True)
+    meta_description = models.TextField(max_length=160, blank=True, null=True)
 
     status = models.CharField(
         max_length=10, choices=Status.choices, default=Status.DRAFT
@@ -31,8 +31,8 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+        # if not self.slug:
+        self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):
