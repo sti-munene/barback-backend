@@ -43,23 +43,39 @@ class RecipeGarnishSerializer(serializers.ModelSerializer):
         fields = ["id", "garnish_type", "is_primary"]
 
 
-class RecipeIngredientSerializer(serializers.ModelSerializer):
+from rest_framework import serializers
+
+from .models import IngredientCategory
+
+
+class IngredientCategorySerializer(serializers.ModelSerializer):
+    parent = serializers.SerializerMethodField()
+    subcategories = serializers.SerializerMethodField()
+
     class Meta:
         model = IngredientCategory
-        fields = [
-            "id",
-            "title",
-        ]
+        fields = ("id", "title", "parent", "subcategories")
+
+    def get_parent(self, obj):
+        if obj.parent:
+            return {"id": obj.parent.id, "title": obj.parent.title}
+        return None
+
+    def get_subcategories(self, obj):
+        # Recursively call the same serializer for children
+        children = obj.children.all()
+        if children.exists():
+            return IngredientCategorySerializer(children, many=True).data
+        return []
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source="ingredient.title")
-    category = RecipeIngredientSerializer(source="ingredient.category")
-    oz_amount = serializers.ReadOnlyField()
+    category = IngredientCategorySerializer(source="ingredient.category")
 
     class Meta:
         model = RecipeIngredient
-        fields = ("id", "name", "category", "ml_amount", "oz_amount", "note")
+        fields = ("id", "name", "category", "amount", "measurement_unit", "note")
 
 
 class RecipeSerializer(serializers.ModelSerializer):

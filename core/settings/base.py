@@ -38,6 +38,7 @@ CUSTOM_APPS = [
     "recipes.apps.RecipesConfig",
     "utils.apps.UtilsConfig",
     "blog.apps.BlogConfig",
+    "quizzes.apps.QuizzesConfig",
 ]
 
 INSTALLED_APPS = CORE_DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS

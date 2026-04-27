@@ -2,10 +2,18 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 
 
+class MeasurementUnit(TextChoices):
+    ML = "ML", "Millilitres"
+    DASH = "DASH", "Dash"
+    DROP = "DROP", "Drop"
+    BARSPOON = "BARSPOON", "Bar Spoon"
+    WHOLE = "WHOLE", "Whole"  # e.g. "2 mint sprigs"
+
+
 class PreparationMethod(TextChoices):
     SHAKEN = "SHAKEN", "Shaken"
     STIRRED = "STIRRED", "Stirred"
-    BUILT = "BUILT" ", Built"
+    BUILT = "BUILT", "Built"
     BLENDED = (
         "BLENDED",
         "Blended",

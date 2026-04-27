@@ -15,8 +15,7 @@ from recipes.models import (
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
     extra = 1  # Number of empty rows to show by default
-    fields = ("ingredient", "ml_amount", "oz_amount", "note")
-    readonly_fields = ("oz_amount",)
+    fields = ("ingredient", "amount", "measurement_unit", "note")
 
 
 class RecipeGarnishInline(admin.TabularInline):
