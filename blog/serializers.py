@@ -29,5 +29,5 @@ class PostSerializer(serializers.ModelSerializer):
             "meta_title",
             "meta_description",
             "author",
-            "published_at",
+            "published_on",
         ]

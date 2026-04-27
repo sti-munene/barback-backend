@@ -26,9 +26,9 @@ class Post(models.Model):
     status = models.CharField(
         max_length=10, choices=Status.choices, default=Status.DRAFT
     )
-    published_at = models.DateTimeField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    published_on = models.DateTimeField(blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         # if not self.slug:
@@ -39,7 +39,7 @@ class Post(models.Model):
         return f"{self.title}"
 
     class Meta:
-        ordering = ["-published_at", "-created_at"]
+        ordering = ["-published_on", "-created_on"]
 
         verbose_name = "Post"
         verbose_name_plural = "Posts"

@@ -5,10 +5,10 @@ from .models import Post
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "status", "published_at", "created_at")
+    list_display = ("title", "status", "published_on", "created_on")
 
     # Sidebar with filters
-    # list_filter = ("status", "created_at", "author")
+    # list_filter = ("status", "created_on", "author")
 
     # Search bar for titles and content
     search_fields = ("title", "content")
@@ -18,9 +18,9 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
 
     # Nice UI touches
-    date_hierarchy = "published_at"  # Adds a date navigation bar at the top
+    date_hierarchy = "published_on"  # Adds a date navigation bar at the top
     raw_id_fields = ("author",)  # Better if you end up with thousands of users
-    ordering = ("-created_at",)  # Show newest first
+    ordering = ("-created_on",)  # Show newest first
 
     # Grouping fields into sections (Fieldsets)
     fieldsets = (
@@ -41,7 +41,7 @@ class PostAdmin(admin.ModelAdmin):
         (
             "Important Dates",
             {
-                "fields": ("published_at",),
+                "fields": ("published_on",),
             },
         ),
     )
